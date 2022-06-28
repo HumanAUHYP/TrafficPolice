@@ -1,0 +1,45 @@
+﻿<Page x:Class="TrafficPolice.HistoryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TrafficPolice"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="HistoryPage">
+
+    <Grid Background="Beige">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="btn_Back" Content="Назад" Width="80" Height="50" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_Back_Click" />
+        <Button x:Name="btn_add" Content="Добавить" Width="80" Height="50" Grid.Row="0" VerticalAlignment="Top" Click="btn_add_Click" HorizontalAlignment="Right" />
+        <ListView x:Name="fil" ItemsSource="{Binding historys}" Grid.Row="1" SelectionChanged="ListView_SelectionChanged" Background="Beige" Margin="0,4,0,-4">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="3"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+
+
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}|{1}">
+                                    <Binding Path="Inspection_History.ID_History"/>
+                                    <Binding Path="ID_History"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+
+                        <TextBlock Text="{Binding ID_History}" HorizontalAlignment="Center" FontSize="30" FontFamily="Rockwell Condensed"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </Grid>
+</Page>

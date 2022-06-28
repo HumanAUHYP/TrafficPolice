@@ -1,0 +1,517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище TrafficPoliceModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="ID_Car" />
+          </Key>
+          <Property Name="ID_Car" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="License_plate" Type="varchar" MaxLength="10" />
+          <Property Name="Engine_number" Type="varchar" MaxLength="50" />
+          <Property Name="Colour" Type="varchar" MaxLength="50" />
+          <Property Name="Car_brand" Type="varchar" MaxLength="50" />
+          <Property Name="Technical_passport_number" Type="int" />
+          <Property Name="Image" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Inspection_History">
+          <Key>
+            <PropertyRef Name="ID_History" />
+          </Key>
+          <Property Name="ID_History" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date_of_Passage" Type="date" />
+          <Property Name="Result" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Owner">
+          <Key>
+            <PropertyRef Name="ID_Owner" />
+          </Key>
+          <Property Name="ID_Owner" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Patronymic" Type="varchar" MaxLength="50" />
+          <Property Name="Place_of_Residence" Type="varchar" MaxLength="50" />
+          <Property Name="Year_of_Birth" Type="date" />
+          <Property Name="Gender" Type="bit" />
+          <Property Name="ImgOwner" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Tech_inspect_car">
+          <Key>
+            <PropertyRef Name="ID_inspect" />
+          </Key>
+          <Property Name="ID_inspect" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Car" Type="int" />
+          <Property Name="ID_Owner" Type="int" />
+          <Property Name="ID_History" Type="int" />
+          <Property Name="ID_Officer" Type="int" />
+        </EntityType>
+        <EntityType Name="Technical_Passport">
+          <Key>
+            <PropertyRef Name="Technical_passport_number" />
+          </Key>
+          <Property Name="Technical_passport_number" Type="int" Nullable="false" />
+          <Property Name="ID_Owner" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Traffic_Police Officer">
+          <Key>
+            <PropertyRef Name="ID_Officer" />
+          </Key>
+          <Property Name="ID_Officer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Patronymic" Type="varchar" MaxLength="50" />
+          <Property Name="Position" Type="varchar" MaxLength="50" />
+          <Property Name="Rank" Type="varchar" MaxLength="50" />
+          <Property Name="ImgPolice" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Login" />
+          </Key>
+          <Property Name="Login" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Car_Technical_Passport">
+          <End Role="Technical_Passport" Type="Self.Technical_Passport" Multiplicity="0..1" />
+          <End Role="Car" Type="Self.Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Technical_Passport">
+              <PropertyRef Name="Technical_passport_number" />
+            </Principal>
+            <Dependent Role="Car">
+              <PropertyRef Name="Technical_passport_number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tech_inspect_car_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="0..1" />
+          <End Role="Tech_inspect_car" Type="Self.Tech_inspect_car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="ID_Car" />
+            </Principal>
+            <Dependent Role="Tech_inspect_car">
+              <PropertyRef Name="ID_Car" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tech_inspect_car_Inspection_History">
+          <End Role="Inspection_History" Type="Self.Inspection_History" Multiplicity="0..1" />
+          <End Role="Tech_inspect_car" Type="Self.Tech_inspect_car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Inspection_History">
+              <PropertyRef Name="ID_History" />
+            </Principal>
+            <Dependent Role="Tech_inspect_car">
+              <PropertyRef Name="ID_History" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tech_inspect_car_Owner">
+          <End Role="Owner" Type="Self.Owner" Multiplicity="0..1" />
+          <End Role="Tech_inspect_car" Type="Self.Tech_inspect_car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owner">
+              <PropertyRef Name="ID_Owner" />
+            </Principal>
+            <Dependent Role="Tech_inspect_car">
+              <PropertyRef Name="ID_Owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tech_inspect_car_Traffic_Police Officer">
+          <End Role="Traffic_Police Officer" Type="Self.Traffic_Police Officer" Multiplicity="0..1" />
+          <End Role="Tech_inspect_car" Type="Self.Tech_inspect_car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Traffic_Police Officer">
+              <PropertyRef Name="ID_Officer" />
+            </Principal>
+            <Dependent Role="Tech_inspect_car">
+              <PropertyRef Name="ID_Officer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Technical_Passport_Owner">
+          <End Role="Owner" Type="Self.Owner" Multiplicity="1" />
+          <End Role="Technical_Passport" Type="Self.Technical_Passport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owner">
+              <PropertyRef Name="ID_Owner" />
+            </Principal>
+            <Dependent Role="Technical_Passport">
+              <PropertyRef Name="ID_Owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище TrafficPoliceModelContainer">
+          <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Inspection_History" EntityType="Self.Inspection_History" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Owner" EntityType="Self.Owner" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tech_inspect_car" EntityType="Self.Tech_inspect_car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Technical_Passport" EntityType="Self.Technical_Passport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Traffic_Police Officer" EntityType="Self.Traffic_Police Officer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Car_Technical_Passport" Association="Self.FK_Car_Technical_Passport">
+            <End Role="Technical_Passport" EntitySet="Technical_Passport" />
+            <End Role="Car" EntitySet="Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tech_inspect_car_Car" Association="Self.FK_Tech_inspect_car_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="Tech_inspect_car" EntitySet="Tech_inspect_car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tech_inspect_car_Inspection_History" Association="Self.FK_Tech_inspect_car_Inspection_History">
+            <End Role="Inspection_History" EntitySet="Inspection_History" />
+            <End Role="Tech_inspect_car" EntitySet="Tech_inspect_car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tech_inspect_car_Owner" Association="Self.FK_Tech_inspect_car_Owner">
+            <End Role="Owner" EntitySet="Owner" />
+            <End Role="Tech_inspect_car" EntitySet="Tech_inspect_car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tech_inspect_car_Traffic_Police Officer" Association="Self.FK_Tech_inspect_car_Traffic_Police Officer">
+            <End Role="Traffic_Police Officer" EntitySet="Traffic_Police Officer" />
+            <End Role="Tech_inspect_car" EntitySet="Tech_inspect_car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Technical_Passport_Owner" Association="Self.FK_Technical_Passport_Owner">
+            <End Role="Owner" EntitySet="Owner" />
+            <End Role="Technical_Passport" EntitySet="Technical_Passport" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TrafficPoliceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="ID_Car" />
+          </Key>
+          <Property Name="ID_Car" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="License_plate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Engine_number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Colour" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Car_brand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Technical_passport_number" Type="Int32" />
+          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Technical_Passport" Relationship="Self.FK_Car_Technical_Passport" FromRole="Car" ToRole="Technical_Passport" />
+          <NavigationProperty Name="Tech_inspect_car" Relationship="Self.FK_Tech_inspect_car_Car" FromRole="Car" ToRole="Tech_inspect_car" />
+        </EntityType>
+        <EntityType Name="Inspection_History">
+          <Key>
+            <PropertyRef Name="ID_History" />
+          </Key>
+          <Property Name="ID_History" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date_of_Passage" Type="DateTime" Precision="0" />
+          <Property Name="Result" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Tech_inspect_car" Relationship="Self.FK_Tech_inspect_car_Inspection_History" FromRole="Inspection_History" ToRole="Tech_inspect_car" />
+        </EntityType>
+        <EntityType Name="Owner">
+          <Key>
+            <PropertyRef Name="ID_Owner" />
+          </Key>
+          <Property Name="ID_Owner" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Place_of_Residence" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Year_of_Birth" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="Boolean" />
+          <Property Name="ImgOwner" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Tech_inspect_car" Relationship="Self.FK_Tech_inspect_car_Owner" FromRole="Owner" ToRole="Tech_inspect_car" />
+          <NavigationProperty Name="Technical_Passport" Relationship="Self.FK_Technical_Passport_Owner" FromRole="Owner" ToRole="Technical_Passport" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Tech_inspect_car">
+          <Key>
+            <PropertyRef Name="ID_inspect" />
+          </Key>
+          <Property Name="ID_inspect" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Car" Type="Int32" />
+          <Property Name="ID_Owner" Type="Int32" />
+          <Property Name="ID_History" Type="Int32" />
+          <Property Name="ID_Officer" Type="Int32" />
+          <NavigationProperty Name="Car" Relationship="Self.FK_Tech_inspect_car_Car" FromRole="Tech_inspect_car" ToRole="Car" />
+          <NavigationProperty Name="Inspection_History" Relationship="Self.FK_Tech_inspect_car_Inspection_History" FromRole="Tech_inspect_car" ToRole="Inspection_History" />
+          <NavigationProperty Name="Owner" Relationship="Self.FK_Tech_inspect_car_Owner" FromRole="Tech_inspect_car" ToRole="Owner" />
+          <NavigationProperty Name="Traffic_Police_Officer" Relationship="Self.FK_Tech_inspect_car_Traffic_Police_Officer" FromRole="Tech_inspect_car" ToRole="Traffic_Police_Officer" />
+        </EntityType>
+        <EntityType Name="Technical_Passport">
+          <Key>
+            <PropertyRef Name="Technical_passport_number" />
+          </Key>
+          <Property Name="Technical_passport_number" Type="Int32" Nullable="false" />
+          <Property Name="ID_Owner" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Car" Relationship="Self.FK_Car_Technical_Passport" FromRole="Technical_Passport" ToRole="Car" />
+          <NavigationProperty Name="Owner" Relationship="Self.FK_Technical_Passport_Owner" FromRole="Technical_Passport" ToRole="Owner" />
+        </EntityType>
+        <EntityType Name="Traffic_Police_Officer">
+          <Key>
+            <PropertyRef Name="ID_Officer" />
+          </Key>
+          <Property Name="ID_Officer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rank" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImgPolice" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Tech_inspect_car" Relationship="Self.FK_Tech_inspect_car_Traffic_Police_Officer" FromRole="Traffic_Police_Officer" ToRole="Tech_inspect_car" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Login" />
+          </Key>
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Car_Technical_Passport">
+          <End Role="Technical_Passport" Type="Self.Technical_Passport" Multiplicity="0..1" />
+          <End Role="Car" Type="Self.Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Technical_Passport">
+              <PropertyRef Name="Technical_passport_number" />
+            </Principal>
+            <Dependent Role="Car">
+              <PropertyRef Name="Technical_passport_number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tech_inspect_car_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="0..1" />
+          <End Role="Tech_inspect_car" Type="Self.Tech_inspect_car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="ID_Car" />
+            </Principal>
+            <Dependent Role="Tech_inspect_car">
+              <PropertyRef Name="ID_Car" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tech_inspect_car_Inspection_History">
+          <End Role="Inspection_History" Type="Self.Inspection_History" Multiplicity="0..1" />
+          <End Role="Tech_inspect_car" Type="Self.Tech_inspect_car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Inspection_History">
+              <PropertyRef Name="ID_History" />
+            </Principal>
+            <Dependent Role="Tech_inspect_car">
+              <PropertyRef Name="ID_History" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tech_inspect_car_Owner">
+          <End Role="Owner" Type="Self.Owner" Multiplicity="0..1" />
+          <End Role="Tech_inspect_car" Type="Self.Tech_inspect_car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owner">
+              <PropertyRef Name="ID_Owner" />
+            </Principal>
+            <Dependent Role="Tech_inspect_car">
+              <PropertyRef Name="ID_Owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Technical_Passport_Owner">
+          <End Role="Owner" Type="Self.Owner" Multiplicity="1" />
+          <End Role="Technical_Passport" Type="Self.Technical_Passport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owner">
+              <PropertyRef Name="ID_Owner" />
+            </Principal>
+            <Dependent Role="Technical_Passport">
+              <PropertyRef Name="ID_Owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tech_inspect_car_Traffic_Police_Officer">
+          <End Role="Traffic_Police_Officer" Type="Self.Traffic_Police_Officer" Multiplicity="0..1" />
+          <End Role="Tech_inspect_car" Type="Self.Tech_inspect_car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Traffic_Police_Officer">
+              <PropertyRef Name="ID_Officer" />
+            </Principal>
+            <Dependent Role="Tech_inspect_car">
+              <PropertyRef Name="ID_Officer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TrafficPoliceEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Car" EntityType="Self.Car" />
+          <EntitySet Name="Inspection_History" EntityType="Self.Inspection_History" />
+          <EntitySet Name="Owner" EntityType="Self.Owner" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Tech_inspect_car" EntityType="Self.Tech_inspect_car" />
+          <EntitySet Name="Technical_Passport" EntityType="Self.Technical_Passport" />
+          <EntitySet Name="Traffic_Police_Officer" EntityType="Self.Traffic_Police_Officer" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Car_Technical_Passport" Association="Self.FK_Car_Technical_Passport">
+            <End Role="Technical_Passport" EntitySet="Technical_Passport" />
+            <End Role="Car" EntitySet="Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tech_inspect_car_Car" Association="Self.FK_Tech_inspect_car_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="Tech_inspect_car" EntitySet="Tech_inspect_car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tech_inspect_car_Inspection_History" Association="Self.FK_Tech_inspect_car_Inspection_History">
+            <End Role="Inspection_History" EntitySet="Inspection_History" />
+            <End Role="Tech_inspect_car" EntitySet="Tech_inspect_car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tech_inspect_car_Owner" Association="Self.FK_Tech_inspect_car_Owner">
+            <End Role="Owner" EntitySet="Owner" />
+            <End Role="Tech_inspect_car" EntitySet="Tech_inspect_car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Technical_Passport_Owner" Association="Self.FK_Technical_Passport_Owner">
+            <End Role="Owner" EntitySet="Owner" />
+            <End Role="Technical_Passport" EntitySet="Technical_Passport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tech_inspect_car_Traffic_Police_Officer" Association="Self.FK_Tech_inspect_car_Traffic_Police_Officer">
+            <End Role="Traffic_Police_Officer" EntitySet="Traffic_Police_Officer" />
+            <End Role="Tech_inspect_car" EntitySet="Tech_inspect_car" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище TrafficPoliceModelContainer" CdmEntityContainer="TrafficPoliceEntities1">
+          <EntitySetMapping Name="Car">
+            <EntityTypeMapping TypeName="TrafficPoliceModel.Car">
+              <MappingFragment StoreEntitySet="Car">
+                <ScalarProperty Name="ID_Car" ColumnName="ID_Car" />
+                <ScalarProperty Name="License_plate" ColumnName="License_plate" />
+                <ScalarProperty Name="Engine_number" ColumnName="Engine_number" />
+                <ScalarProperty Name="Colour" ColumnName="Colour" />
+                <ScalarProperty Name="Car_brand" ColumnName="Car_brand" />
+                <ScalarProperty Name="Technical_passport_number" ColumnName="Technical_passport_number" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Inspection_History">
+            <EntityTypeMapping TypeName="TrafficPoliceModel.Inspection_History">
+              <MappingFragment StoreEntitySet="Inspection_History">
+                <ScalarProperty Name="ID_History" ColumnName="ID_History" />
+                <ScalarProperty Name="Date_of_Passage" ColumnName="Date_of_Passage" />
+                <ScalarProperty Name="Result" ColumnName="Result" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Owner">
+            <EntityTypeMapping TypeName="TrafficPoliceModel.Owner">
+              <MappingFragment StoreEntitySet="Owner">
+                <ScalarProperty Name="ID_Owner" ColumnName="ID_Owner" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Place_of_Residence" ColumnName="Place_of_Residence" />
+                <ScalarProperty Name="Year_of_Birth" ColumnName="Year_of_Birth" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="ImgOwner" ColumnName="ImgOwner" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="TrafficPoliceModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tech_inspect_car">
+            <EntityTypeMapping TypeName="TrafficPoliceModel.Tech_inspect_car">
+              <MappingFragment StoreEntitySet="Tech_inspect_car">
+                <ScalarProperty Name="ID_inspect" ColumnName="ID_inspect" />
+                <ScalarProperty Name="ID_Car" ColumnName="ID_Car" />
+                <ScalarProperty Name="ID_Owner" ColumnName="ID_Owner" />
+                <ScalarProperty Name="ID_History" ColumnName="ID_History" />
+                <ScalarProperty Name="ID_Officer" ColumnName="ID_Officer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Technical_Passport">
+            <EntityTypeMapping TypeName="TrafficPoliceModel.Technical_Passport">
+              <MappingFragment StoreEntitySet="Technical_Passport">
+                <ScalarProperty Name="Technical_passport_number" ColumnName="Technical_passport_number" />
+                <ScalarProperty Name="ID_Owner" ColumnName="ID_Owner" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Traffic_Police_Officer">
+            <EntityTypeMapping TypeName="TrafficPoliceModel.Traffic_Police_Officer">
+              <MappingFragment StoreEntitySet="Traffic_Police Officer">
+                <ScalarProperty Name="ID_Officer" ColumnName="ID_Officer" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Rank" ColumnName="Rank" />
+                <ScalarProperty Name="ImgPolice" ColumnName="ImgPolice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="TrafficPoliceModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

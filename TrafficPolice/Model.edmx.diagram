@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4c76f939a43f441e81fc77a85994f8d7" Name="Diagram1">
+        <EntityTypeShape EntityType="TrafficPoliceModel.Car" Width="1.5" PointX="5.25" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrafficPoliceModel.Inspection_History" Width="1.5" PointX="5.25" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrafficPoliceModel.Owner" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrafficPoliceModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrafficPoliceModel.Tech_inspect_car" Width="1.5" PointX="7.5" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrafficPoliceModel.Technical_Passport" Width="1.5" PointX="3" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrafficPoliceModel.Traffic_Police_Officer" Width="1.5" PointX="5.25" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="TrafficPoliceModel.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="TrafficPoliceModel.FK_Car_Technical_Passport" ManuallyRouted="false" />
+        <AssociationConnector Association="TrafficPoliceModel.FK_Tech_inspect_car_Car" ManuallyRouted="false" />
+        <AssociationConnector Association="TrafficPoliceModel.FK_Tech_inspect_car_Inspection_History" ManuallyRouted="false" />
+        <AssociationConnector Association="TrafficPoliceModel.FK_Tech_inspect_car_Owner" ManuallyRouted="false" />
+        <AssociationConnector Association="TrafficPoliceModel.FK_Technical_Passport_Owner" ManuallyRouted="false" />
+        <AssociationConnector Association="TrafficPoliceModel.FK_Tech_inspect_car_Traffic_Police_Officer" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
